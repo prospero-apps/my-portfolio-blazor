@@ -1,19 +1,13 @@
-﻿<div class="col-md-6 col-lg-4 mb-2">
-    <Project />
-</div>
-<div class="col-md-6 col-lg-4 mb-2">
-    <Project />
-</div>
-<div class="col-md-6 col-lg-4 mb-2">
-    <Project />
-</div>
-<div class="col-md-6 col-lg-4 mb-2">
-    <Project />
-</div>
-<div class="col-md-6 col-lg-4 mb-2">
-    <Project />
-</div>
+﻿@using MyPortfolio.Models;
+
+@foreach(var project in Projects)
+{
+    <div class="col-md-6 col-lg-4 mb-2">
+        <Project ProjectData="@project" />
+    </div>
+}
 
 @code {
-
+    [Parameter]
+    public List<ProjectModel> Projects { get; set; }
 }

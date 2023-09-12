@@ -1,18 +1,25 @@
-﻿<a href="">
+﻿@using MyPortfolio.Models;
+<a href="">
     <div class="card">
-        <img class="img-thumbnail" src="/images/Forest Monsters.png" />
+        <img class="img-thumbnail" src="@ProjectData.ImageUrl" />
         <div class="card-body">
-            <h5 class="card-title mb-3">Forest Monsters</h5>
+            <h5 class="card-title mb-3">@ProjectData.Name</h5>
             <div class="tech-icons">
-                <div class="single-icon"><i class="devicon-csharp-plain" /></div>
-                <div class="single-icon"><i class="devicon-unity-original" /></div>
+                @foreach (var tech in ProjectData.Techs)
+                {
+                    <div class="single-icon">
+                        <i class="@tech.Icon" />
+                    </div>
+                }
             </div>
-            <p>A 2D game made with Unity with C# scripting. Your task is to save the enchanted forest.</p>
+            <p>@ShortenDescription(ProjectData.Description, 120)</p>
             <div class="link-icons">
-                <div class="single-icon"><i class="devicon-github-original" /></div>
-                <div class="single-icon"><i class="bi bi-youtube" /></div>
-                <div class="single-icon"><i class="bi bi-book" /></div>
-                <div class="single-icon"><i class="bi bi-download" /></div>
+                @foreach (var link in ProjectData.Links)
+                {
+                    <div class="single-icon">
+                        <i class="@link.Icon" />
+                    </div>
+                }
             </div>
             <p class="more-info">Click to view more...</p>
         </div>
@@ -20,5 +27,12 @@
 </a>
 
 @code {
+    [Parameter]
+    public ProjectModel ProjectData { get; set; }
 
+    protected string ShortenDescription(string description, int length)
+    {
+        string shortDescription = description.Length < length ? description : description[0..length] + "...";
+        return shortDescription;
+    }
 }

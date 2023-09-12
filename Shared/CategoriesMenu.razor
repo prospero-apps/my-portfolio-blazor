@@ -1,62 +1,38 @@
-﻿<div class="sidebar-menu">
-    <h3 class="sidebar-header">Categories</h3>
-    <div class="sidebar-scroll">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="">
-                <div class="sidebar-item">
-                    <i class="bi bi-globe" />
-                    <p>Web Projects</p>
-                </div>
-            </NavLink>
-        </div>
+﻿@using MyPortfolio.Models;
+@inject HttpClient Http
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="">
-                <div class="sidebar-item">
-                    <i class="bi bi-controller" />
-                    <p>Games</p>
+<div class="sidebar-menu">
+    @if (Categories == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <h3 class="sidebar-header">Categories</h3>
+        <div class="sidebar-scroll">
+            @foreach (var category in Categories)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="">
+                        <div class="sidebar-item">
+                            <i class="@category.Icon" />
+                            <p>@category.Name</p>
+                        </div>
+                    </NavLink>
                 </div>
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="">
-                <div class="sidebar-item">
-                    <i class="bi bi-box" />
-                    <p>Blender Projects</p>
-                </div>
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="">
-                <div class="sidebar-item">
-                    <i class="bi bi-book-half" />
-                    <p>Books</p>
-                </div>
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="">
-                <div class="sidebar-item">
-                    <i class="bi bi-easel" />
-                    <p>Online Courses</p>
-                </div>
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="">
-                <div class="sidebar-item">
-                    <i class="bi bi-layout-text-window" />
-                    <p>Magazines</p>
-                </div>
-            </NavLink>
-        </div>
-    </div>
-</div>
+            }
+        </div>        
+    }
+</div>  
 
 @code {
+    public List<CategoryModel>? Categories { get; set; }
+    public DataModel? Data { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        Data = await Http.GetFromJsonAsync<DataModel>("data/data.json");
+
+        Categories = Data.Categories;        
+    }
 }
