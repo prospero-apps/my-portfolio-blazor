@@ -25,6 +25,10 @@ jobs:
       - name: Publish
         run: dotnet publish MyPortfolio.sln -c:Release -o:publish -p:GHPages=true
 
+      # changes the base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
+      - name: Change base-tag in index.html from / to my-portfolio-blazor
+        run: sed -i 's/<base href="\/" \/>/<base href="\/my-portfolio-blazor\/" \/>/g' release/wwwroot/index.html
+
       # Deploy the site
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
