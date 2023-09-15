@@ -12,8 +12,10 @@
         <div class="sidebar-scroll">
             @foreach (var category in Categories)
             {
+                var link = "/projects-by-category/" + category.Id;
+
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="">
+                    <NavLink class="nav-link" href="@link">
                         <div class="sidebar-item">
                             <i class="@category.Icon" />
                             <p>@category.Name</p>

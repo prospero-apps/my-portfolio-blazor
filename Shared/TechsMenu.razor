@@ -12,8 +12,10 @@
         <div class="sidebar-scroll">
             @foreach (var tech in Techs)
             {
+                var link = "/projects-by-tech/" + tech.Id;
+
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="">
+                    <NavLink class="nav-link" href="@link">
                         <div class="sidebar-item">
                             <i class="@tech.Icon" />
                             <p>@tech.Name</p>

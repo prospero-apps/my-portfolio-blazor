@@ -1,50 +1,84 @@
-﻿@page "/ProjectDetails"
+﻿@page "/project-details/{ProjectId:int}"
+@using MyPortfolio.Models;
 
-<h1 class="mb-5">Forest Monsters</h1>
-<div class="row">
-    <div class="col-lg-6 mb-4">
-        <img class="img-fluid" src="/images/Forest Monsters.png" />
-    </div>    
-    <div class="col-lg-6">        
-        <p>A 2D game made with Unity with C# scripting. Your task is to save the enchanted forest.</p>
-
-        <h5 class="mb-4">Technologies used in this project:</h5>
-        <div class="techs">
-            <div class="tech">
-                <span><i class="devicon-csharp-plain" />C#</span>  
-            </div>
-            <div class="tech">
-                <span><i class="devicon-unity-original" />Unity</span>
-            </div>
+@if (SelectedProject == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h1 class="mb-5">@SelectedProject.Name</h1>
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <img class="img-fluid" src="@SelectedProject.ImageUrl" />
         </div>
-        
-        <h5 class="mb-4">Useful links related to this project:</h5>
-        <div>
-            <div class="link">
-                <a href="https://github.com/prospero-apps/forest-monsters" target="_blank">
-                    <span><i class="devicon-github-original" />Github</span>
-                </a>
+        <div class="col-lg-6">
+            <p>@SelectedProject.Description</p>
+
+            <h5 class="mb-4">Technologies used in this project:</h5>
+
+            <div class="techs">
+                @foreach (var tech in SelectedProject.Techs)
+                {
+                    <div class="tech">
+                        <i class="@tech.Icon" />
+                        @tech.Name
+                    </div>
+                }
             </div>
-            <div class="link">
-                <a href="https://youtu.be/i7xyMbhdg_8" target="_blank">
-                    <span><i class="bi bi-youtube" />YouTube</span>
-                </a>
-            </div>
-            <div class="link">
-                <a href="https://prosperocoder.com/posts/unity/forest-monsters-a-2d-platformer-game-made-with-unity" target="_blank">
-                    <span><i class="bi bi-book" />My Prospero Coder blog</span>
-                </a>
-            </div>
-            <div class="link">
-                <a href="https://prosperocoder.itch.io/forest-monsters" target="_blank">
-                    <span><i class="bi bi-download" />Download</span>
-                </a>
+
+            <h5 class="mb-4">Useful links related to this project:</h5>
+
+            <div>
+                @foreach (var link in SelectedProject.Links)
+                {
+                    <div class="link">
+                        <a href="@link.Destination" target="_blank">
+                            <span><i class="@link.Icon" />@link.DisplayText</span>
+                        </a>
+                    </div>
+                }
             </div>
         </div>
     </div>
-</div>
-
+}
 
 @code {
+    [Inject]
+    HttpClient Http { get; set; }
 
+    [Parameter]
+    public int ProjectId { get; set; }
+
+    public DataModel? Data { get; set; }
+    public ProjectModel? SelectedProject { get; set; }
+    public List<CategoryModel>? Categories { get; set; }
+    public List<TechModel>? Techs { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Data = await Http.GetFromJsonAsync<DataModel>("data/data.json");
+
+        Categories = Data.Categories;
+
+        Techs = Data.Techs;
+
+        SelectedProject = (from project in Data.Projects
+                          where project.Id == ProjectId
+                          join category in Categories
+                          on project.Category equals category.Id
+                          select new ProjectModel
+                              {
+                                  Id = project.Id,
+                                  Name = project.Name,
+                                  Description = project.Description,
+                                  ImageUrl = project.ImageUrl,
+                                  Category = category,
+                                  Techs = (from tech in Techs
+                                           where project.Techs.Contains(tech.Id)
+                                           select tech).ToList(),
+                                  Links = project.Links
+                              }).SingleOrDefault();                          
+
+    }
 }

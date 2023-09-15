@@ -1,11 +1,62 @@
-﻿@page "/ProjectsByTech"
+﻿@page "/projects-by-tech/{TechId:int}"
+@using MyPortfolio.Models;
 
-<h3>Projects By Tech</h3>
+@if (Projects == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (Projects.Count() == 0)
+{
+    <p><em>There are no projects using this technology.</em></p>
+}
+else
+{
+    <h3>Technology: @Tech.Name (@Projects.Count())</h3>
 
-<Project />
-<Project />
-<Project />
+    @if (Projects.Count() > 0)
+    {
+        <div class="row mt-3">
+            <ProjectsDisplay Projects="@Projects" />
+        </div>
+    }
+}
 
 @code {
+    [Inject]
+    HttpClient Http { get; set; }
 
+    [Parameter]
+    public int TechId { get; set; }
+
+    public List<ProjectModel>? Projects { get; set; }
+    public List<CategoryModel>? Categories { get; set; }    
+    public List<TechModel>? Techs { get; set; }
+    public TechModel? Tech { get; set; }
+    public DataModel? Data { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Data = await Http.GetFromJsonAsync<DataModel>("data/data.json");
+
+        Categories = Data.Categories;
+
+        Techs = Data.Techs;
+
+        Tech = Techs.FirstOrDefault(t => t.Id == TechId);
+               
+        Projects = (from project in Data.Projects
+                    where project.Techs.Contains(TechId)
+                    select new ProjectModel
+                        {
+                            Id = project.Id,
+                            Name = project.Name,
+                            Description = project.Description,
+                            ImageUrl = project.ImageUrl,
+                            Category = Categories.FirstOrDefault(c => c.Id == project.Category),
+                            Techs = (from tech in Techs
+                                     where project.Techs.Contains(tech.Id)
+                                     select tech).ToList(),
+                            Links = project.Links
+                        }).ToList();
+    }
 }
