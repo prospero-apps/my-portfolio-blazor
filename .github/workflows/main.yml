@@ -21,6 +21,9 @@ jobs:
         with:
           dotnet-version: 7.0.x
 
+      - name: Disable Jekyll
+        run: touch publish/wwwroot/.nojekyll
+
       # Publish the site
       - name: Publish
         run: dotnet publish MyPortfolio.sln -c:Release -o:publish -p:GHPages=true
