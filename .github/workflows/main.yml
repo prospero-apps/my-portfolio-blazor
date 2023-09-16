@@ -25,8 +25,7 @@ jobs:
       - name: Publish
         run: dotnet publish MyPortfolio.sln -c:Release -o:publish -p:GHPages=true
 
-      # changes the base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
-      
+      # changes the base-tag in index.html from '/' to 'my-portfolio-blazor' to match GitHub Pages repository subdirectory      
       - name: Rewrite base href
         uses: SteveSandersonMS/ghaction-rewrite-base-href@v1
         with:
