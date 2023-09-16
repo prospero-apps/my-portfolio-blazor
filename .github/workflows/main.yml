@@ -30,7 +30,7 @@ jobs:
       - name: Rewrite base href
         uses: SteveSandersonMS/ghaction-rewrite-base-href@v1
         with:
-          html_path: ${{ env.PUBLISH_DIR }}/index.html
+          html_path: publish/wwwroot/index.html
           base_href: /my-portfolio-blazor/
 
       # Deploy the site
