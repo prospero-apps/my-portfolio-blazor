@@ -26,8 +26,12 @@ jobs:
         run: dotnet publish MyPortfolio.sln -c:Release -o:publish -p:GHPages=true
 
       # changes the base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
-      - name: Change base-tag in index.html from / to my-portfolio-blazor
-        run: sed -i 's/<base href="\/" \/>/<base href="\/my-portfolio-blazor\/" \/>/g' publish/wwwroot/index.html
+      
+      - name: Rewrite base href
+        uses: SteveSandersonMS/ghaction-rewrite-base-href@v1
+        with:
+          html_path: ${{ env.PUBLISH_DIR }}/index.html
+          base_href: /my-portfolio-blazor/
 
       # Deploy the site
       - name: Deploy
