@@ -19,18 +19,18 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 7.0.x
-
-      - name: Disable Jekyll
-        run: touch publish/wwwroot/.nojekyll
+          dotnet-version: 7.0.x      
 
       # Publish the site
       - name: Publish
         run: dotnet publish MyPortfolio.sln -c:Release -o:publish -p:GHPages=true
 
-     # changes the base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
+      # changes the base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
       - name: Change base-tag in index.html from / to my-portfolio-blazor
         run: sed -i 's/<base href="\/" \/>/<base href="\/my-portfolio-blazor\/" \/>/g' publish/wwwroot/index.html
+
+      - name: Disable Jekyll
+        run: touch publish/wwwroot/.nojekyll
 
       # Deploy the site
       - name: Deploy
