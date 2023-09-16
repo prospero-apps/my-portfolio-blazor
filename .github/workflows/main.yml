@@ -19,11 +19,15 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
 
       # Publish the site
       - name: Publish
         run: dotnet publish MyPortfolio.sln -c:Release -o:publish -p:GHPages=true
+
+      # changes the base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
+      - name: Change base-tag in index.html from / to my-portfolio-blazor
+        run: sed -i 's/<base href="\/" \/>/<base href="\/my-portfolio-blazor\/" \/>/g' publish/wwwroot/index.html
 
       # Deploy the site
       - name: Deploy
