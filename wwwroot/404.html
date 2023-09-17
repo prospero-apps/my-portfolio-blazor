@@ -1,34 +1,38 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-
+﻿<!doctype html>
+<html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>MyPortfolio</title>
-    <base href="/" />
-    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/app.css" rel="stylesheet" />
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link href="MyPortfolio.styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <meta charset="utf-8">
+    <title>single page apps for github pages</title>
+    <script type="text/javascript">
+        // single page apps for github pages
+        // mit license
+        // https://github.com/rafgraph/spa-github-pages
+        // this script takes the current url and converts the path and query
+        // string into just a query string, and then redirects the browser
+        // to the new url with only a query string and hash fragment
+
+        // if you're creating a project pages site and not using a custom domain,
+        // then set pathsegmentstokeep to 1 (enterprise users may need to set it to > 1).
+        // this way the code will only replace the route part of the path, and not
+        // the real directory in which the app resides, for example:
+        // https://username.github.io/repo-name/one/two?a=b&c=d#qwe becomes
+        // https://username.github.io/repo-name/?/one/two&a=b~and~c=d#qwe
+        // otherwise, leave pathsegmentstokeep as 0.
+
+        var pathsegmentstokeep = 1;
+
+        var l = window.location;
+
+        l.replace(
+            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+            l.pathname.split('/').slice(0, 1 + pathsegmentstokeep).join('/') + '/?/' +
+            l.pathname.slice(1).split('/').slice(pathsegmentstokeep).join('/').replace(/&/g, '~and~') +
+            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            l.hash
+        );
+
+    </script>
 </head>
-
 <body>
-    <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
-    </div>
-
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
-    <script src="_framework/blazor.webassembly.js"></script>
 </body>
-
 </html>
