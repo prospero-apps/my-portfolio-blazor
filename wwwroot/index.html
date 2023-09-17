@@ -12,44 +12,30 @@
     <link href="MyPortfolio.styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <!doctype html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>single page apps for github pages</title>
-        <script type="text/javascript">
-            // single page apps for github pages
-            // mit license
-            // https://github.com/rafgraph/spa-github-pages
-            // this script takes the current url and converts the path and query
-            // string into just a query string, and then redirects the browser
-            // to the new url with only a query string and hash fragment
+    <script type="text/javascript">
 
-            // if you're creating a project pages site and not using a custom domain,
-            // then set pathsegmentstokeep to 1 (enterprise users may need to set it to > 1).
-            // this way the code will only replace the route part of the path, and not
-            // the real directory in which the app resides, for example:
-            // https://username.github.io/repo-name/one/two?a=b&c=d#qwe becomes
-            // https://username.github.io/repo-name/?/one/two&a=b~and~c=d#qwe
-            // otherwise, leave pathsegmentstokeep as 0.
+        // single page apps for github pages
+        // mit license
+        // https://github.com/rafgraph/spa-github-pages
+        // this script checks to see if a redirect is present in the query string,
+        // converts it back into the correct url and adds it to the
+        // browser's history using window.history.replacestate(...),
+        // which won't cause the browser to attempt to load the new url.
+        // when the single page app is loaded further down in this file,
+        // the correct url will be waiting in the browser's history for
+        // the single page app to route accordingly.
 
-            var pathsegmentstokeep = 1;
-
-            var l = window.location;
-
-            l.replace(
-                l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-                l.pathname.split('/').slice(0, 1 + pathsegmentstokeep).join('/') + '/?/' +
-                l.pathname.slice(1).split('/').slice(pathsegmentstokeep).join('/').replace(/&/g, '~and~') +
-                (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-                l.hash
-            );
-
-        </script>
-    </head>
-    <body>
-    </body>
-</html>
+        (function (l) {
+            if (l.search[1] === '/') {
+                var decoded = l.search.slice(1).split('&').map(function (s) {
+                    return s.replace(/~and~/g, '&')
+                }).join('?');
+                window.history.replacestate(null, null,
+                    l.pathname.slice(0, -1) + decoded + l.hash
+                );
+            }
+        }(window.location))
+    </script>
 </head>
 
 <body>
