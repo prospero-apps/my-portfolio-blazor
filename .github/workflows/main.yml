@@ -41,8 +41,9 @@ jobs:
         
       # Deploy the site
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
-          folder: publish/wwwroot
+          publish_dir: publish/wwwroot
+          force_orphan: true
+
