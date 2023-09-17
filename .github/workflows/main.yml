@@ -23,10 +23,10 @@ jobs:
 
       # Publish the site
       - name: Publish
-        run: |
-          cp wwwroot/index.html wwwroot/404.html
+        #run: |
+          #cp wwwroot/index.html wwwroot/404.html
           # dotnet publish MyPortfolio.sln -c:Release -o:publish -p:GHPages=true
-          run: dotnet publish MyPortfolio.csproj -c Release -o release –nologo
+        run: dotnet publish MyPortfolio.csproj -c Release -o release –nologo
 
       # changes the base-tag in index.html from '/' to 'my-portfolio-blazor' to match GitHub Pages repository subdirectory
       - name: Change base-tag in index.html from / to my-portfolio-blazor
